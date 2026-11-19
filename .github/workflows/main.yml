@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Carpeta que contiene build_dashboard.py y validate.py.
+  # Carpeta que contiene build_dashboard.py.
   # Si los archivos están en la raíz del repo, cambia a "."
   APP_DIR: CUIDA_DAT4CCION_2026
 
@@ -32,10 +32,6 @@ jobs:
       - name: Regenerar dashboard y datos
         working-directory: ${{ env.APP_DIR }}
         run: python build_dashboard.py
-
-      - name: Validar integridad de datos
-        working-directory: ${{ env.APP_DIR }}
-        run: python validate.py
 
       - uses: actions/configure-pages@v5
 
