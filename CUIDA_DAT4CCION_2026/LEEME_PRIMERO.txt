@@ -1,6 +1,0 @@
-Abrir dashboard.html con doble clic. No requiere internet.
-El reporte PDF sigue la plantilla del Datatón; DOCX editable.
-Completar integrantes y enlace del repositorio del equipo antes de entregar.
-Código fuente principal: dist/index.html. Para regenerar: python build_dashboard.py.
-Para validar: python validate.py.
-El escenario es hipotético, no un resultado de impacto.
