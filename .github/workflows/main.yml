@@ -2,7 +2,7 @@ name: Publicar CUIDA en GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   workflow_dispatch:
 
 permissions:
@@ -14,11 +14,6 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
-env:
-  # Carpeta que contiene build_dashboard.py.
-  # Si los archivos están en la raíz del repo, cambia a "."
-  APP_DIR: CUIDA_DAT4CCION_2026
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,9 +24,22 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Regenerar dashboard y datos
-        working-directory: ${{ env.APP_DIR }}
-        run: python build_dashboard.py
+      - name: Localizar y ejecutar build_dashboard.py
+        run: |
+          SCRIPT=$(find . -name build_dashboard.py -not -path "./.git/*" | head -n 1)
+          echo "Script encontrado: $SCRIPT"
+          test -n "$SCRIPT"
+          DIR=$(dirname "$SCRIPT")
+          cd "$DIR"
+          python build_dashboard.py
+          echo "APP_DIR=$DIR" >> "$GITHUB_ENV"
+
+      - name: Verificar el HTML generado
+        run: |
+          echo "Directorio: $APP_DIR"
+          ls -la "$APP_DIR/dist"
+          echo "Coincidencias del encabezado viejo (debe ser 0):"
+          grep -c "<header" "$APP_DIR/dist/index.html" || true
 
       - uses: actions/configure-pages@v5
 
